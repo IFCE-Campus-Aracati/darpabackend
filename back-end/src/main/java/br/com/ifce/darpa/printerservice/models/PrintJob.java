@@ -1,42 +1,43 @@
 package br.com.ifce.darpa.printerservice.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_print_request")
-public class PrintRequest {
+@Table(name = "tb_print_job")
+public class PrintJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileUrl;
-
     @ManyToOne
-    private User user;
+    private Printer printer;
 
-    @ManyToOne
-    private PrintJob printJob;
+    @OneToMany(mappedBy = "printJob", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PrintRequest> printRequests;
 
     @Enumerated(EnumType.STRING)
     private PrintStatus status;
 
-    public PrintRequest() {}
+    public PrintJob() {}
 
-    public PrintRequest(Long id, String fileUrl, User user, PrintJob printJob, PrintStatus status) {
+    public PrintJob(Long id, Printer printer, List<PrintRequest> printRequests, PrintStatus status) {
         this.id = id;
-        this.fileUrl = fileUrl;
-        this.user = user;
-        this.printJob = printJob;
+        this.printer = printer;
+        this.printRequests = printRequests;
         this.status = status;
     }
 
@@ -48,28 +49,20 @@ public class PrintRequest {
         this.id = id;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public Printer getPrinter() {
+        return printer;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setPrinter(Printer printer) {
+        this.printer = printer;
     }
 
-    public User getUser() {
-        return user;
+    public List<PrintRequest> getPrintRequests() {
+        return printRequests;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public PrintJob getPrintJob() {
-        return printJob;
-    }
-
-    public void setPrintJob(PrintJob printJob) {
-        this.printJob = printJob;
+    public void setPrintRequests(List<PrintRequest> printRequests) {
+        this.printRequests = printRequests;
     }
 
     public PrintStatus getStatus() {
@@ -84,8 +77,8 @@ public class PrintRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PrintRequest that = (PrintRequest) o;
-        return Objects.equals(id, that.id);
+        PrintJob printJob = (PrintJob) o;
+        return Objects.equals(id, printJob.id);
     }
 
     @Override
