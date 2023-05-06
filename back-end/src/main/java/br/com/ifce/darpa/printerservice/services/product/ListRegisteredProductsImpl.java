@@ -15,7 +15,7 @@ public class ListRegisteredProductsImpl implements ListRegisteredProducts {
     private ProductRepository productRepository;
 
     @Override
-    public Page<Response> execute(Request request) {
+    public Page<Response> execute(ListRegisteredProducts.Request request) {
         return productRepository
                 .findAll(PageRequest.of(request.pageNumber(), request.pageSize()))
                 .map(this::productToResponse);

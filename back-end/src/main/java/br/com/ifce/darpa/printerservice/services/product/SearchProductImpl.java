@@ -14,7 +14,7 @@ public class SearchProductImpl implements SearchProduct {
     private ProductRepository productRepository;
 
     @Override
-    public Response execute(Request request) {
+    public Response execute(SearchProduct.Request request) {
         return productRepository
                 .findByName(request.name())
                 .map(this::productToResponse)
