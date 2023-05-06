@@ -54,6 +54,8 @@ class UpdateProductTest {
 
         UpdateProduct.Request request = new UpdateProduct.Request(invalidId, null, null, null);
 
-        Assertions.assertThrows(ProductNotFoundException.class, () -> updateProduct.execute(request));
+        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> updateProduct.execute(request));
+
+        Assertions.assertEquals("product with id 1 not found", exception.getMessage());
     }
 }

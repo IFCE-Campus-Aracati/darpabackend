@@ -18,7 +18,7 @@ public class DeleteProductImpl implements DeleteProduct {
                 .ifPresentOrElse(productRepository::delete,
                         () -> {
                             throw new ProductNotFoundException(
-                                    "Product with id %d not found".formatted(id)
+                                    "product with id %d not found".formatted(id)
                             );
                         }
                 );

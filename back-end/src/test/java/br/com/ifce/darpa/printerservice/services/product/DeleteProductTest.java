@@ -42,7 +42,9 @@ class DeleteProductTest {
 
         Mockito.when(productRepository.findById(invalidId)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(ProductNotFoundException.class, () -> deleteProduct.execute(invalidId));
+        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> deleteProduct.execute(invalidId));
+
+        Assertions.assertEquals("product with id 1 not found", exception.getMessage());
 
         Mockito.verify(productRepository, Mockito.times(1)).findById(invalidId);
         Mockito.verify(productRepository, Mockito.never()).delete(new Product());

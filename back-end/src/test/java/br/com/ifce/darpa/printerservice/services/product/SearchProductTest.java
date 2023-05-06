@@ -49,6 +49,8 @@ class SearchProductTest {
 
         SearchProduct.Request request = new SearchProduct.Request(productName);
 
-        Assertions.assertThrows(ProductNotFoundException.class, () -> searchProduct.execute(request));
+        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> searchProduct.execute(request));
+
+        Assertions.assertEquals("product with name Non-existent product not found", exception.getMessage());
     }
 }
