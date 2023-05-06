@@ -1,5 +1,6 @@
 package br.com.ifce.darpa.printerservice.models;
 
+
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -9,17 +10,24 @@ import java.util.Objects;
 @Entity
 @Table(name = "tb_role")
 public class Role implements Serializable {
+
+    public enum Authority {
+        ROLE_ADMIN,
+        ROLE_OPERATOR,
+        ROLE_USER
+    }
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     public Role() {
     }
 
-    public Role(Long id, String authority) {
+    public Role(Long id, Authority authority) {
         this.id = id;
         this.authority = authority;
     }
@@ -32,11 +40,11 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getAuthority() {
+    public Authority getAuthority() {
         return authority;
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(Authority authority) {
         this.authority = authority;
     }
 

@@ -1,5 +1,6 @@
 package br.com.ifce.darpa.printerservice.models;
 
+
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -18,6 +19,7 @@ public class User implements Serializable {
     private Long id;
     private String name;
     private String email;
+    private String password;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -27,11 +29,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String name, String email, Set<Role> roles) {
+    public User(Long id, String name, String email, String password, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.roles = roles;
+        this.password = password;
     }
 
     public Long getId() {
@@ -64,6 +67,14 @@ public class User implements Serializable {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
