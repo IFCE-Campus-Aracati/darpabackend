@@ -1,0 +1,21 @@
+# Arquivos Java
+*.class
+*.jar
+*.war
+*.ear
+target/
+bin/
+classes/
+build/
+dist/
+out/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Arquivos de log
+*.log
+
+# Outros
+.DS_Store
