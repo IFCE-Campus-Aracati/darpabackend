@@ -21,7 +21,7 @@ class PrintRequestRepositoryTest {
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null);
+        var printRequest = new PrintRequest(null, user, null);
 
         printRequestRepository.save(printRequest);
 
@@ -29,7 +29,6 @@ class PrintRequestRepositoryTest {
 
         Assertions.assertNotNull(fetchedPrintRequest);
         Assertions.assertNotNull(fetchedPrintRequest.getId());
-        Assertions.assertEquals(printRequest.getFileUrl(), fetchedPrintRequest.getFileUrl());
         Assertions.assertEquals(printRequest.getUser(), fetchedPrintRequest.getUser());
         Assertions.assertEquals(printRequest.getPrintJob(), fetchedPrintRequest.getPrintJob());
     }
@@ -39,8 +38,8 @@ class PrintRequestRepositoryTest {
         var user1 = new User(1L, "John Doe", "john@email.com", Set.of());
         var user2 = new User(1L, "Jane Doe", "jane@email.com", Set.of());
 
-        var printRequest1 = new PrintRequest(null, "example1.pdf", user1, null);
-        var printRequest2 = new PrintRequest(null, "example2.pdf", user2, null);
+        var printRequest1 = new PrintRequest(null, user1, null);
+        var printRequest2 = new PrintRequest(null, user2, null);
 
         printRequestRepository.saveAll(List.of(printRequest1, printRequest2));
 
@@ -52,7 +51,7 @@ class PrintRequestRepositoryTest {
     @Test
     void givenIdThenShouldReturnPrintRequestOfThatId() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null);
+        var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
 
@@ -60,7 +59,6 @@ class PrintRequestRepositoryTest {
 
         Assertions.assertNotNull(fetchedPrintRequest);
         Assertions.assertEquals(savedPrintRequest.getId(), fetchedPrintRequest.getId());
-        Assertions.assertEquals(savedPrintRequest.getFileUrl(), fetchedPrintRequest.getFileUrl());
         Assertions.assertEquals(savedPrintRequest.getUser(), fetchedPrintRequest.getUser());
         Assertions.assertEquals(savedPrintRequest.getPrintJob(), fetchedPrintRequest.getPrintJob());
     }
@@ -68,7 +66,7 @@ class PrintRequestRepositoryTest {
     @Test
     void givenIdToDeleteThenShouldDeleteThePrintRequest() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null);
+        var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
 

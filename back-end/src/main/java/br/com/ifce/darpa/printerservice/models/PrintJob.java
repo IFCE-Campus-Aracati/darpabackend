@@ -35,9 +35,16 @@ public class PrintJob {
 
     public PrintJob() {}
 
-    public PrintJob(Long id, Printer printer, Status status) {
+    public PrintJob(Long id, PrintRequest printRequest, Status status) {
+        this.id = id;
+        this.printRequest = printRequest;
+        this.status = status;
+    }
+
+    public PrintJob(Long id, Printer printer, PrintRequest printRequest, Status status) {
         this.id = id;
         this.printer = printer;
+        this.printRequest = printRequest;
         this.status = status;
     }
 

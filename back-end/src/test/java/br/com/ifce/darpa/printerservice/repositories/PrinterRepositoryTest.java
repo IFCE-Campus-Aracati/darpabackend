@@ -74,8 +74,8 @@ class PrinterRepositoryTest {
 
     @Test
     void givenPrinterWithPrintJobsThenShouldReturnPrinterWithPrintJobs() {
-        var printJob1 = new PrintJob(null, printer, Status.PENDING);
-        var printJob2 = new PrintJob(null, printer, Status.PENDING);
+        var printJob1 = new PrintJob(null, printer, null, Status.PENDING);
+        var printJob2 = new PrintJob(null, printer, null, Status.PENDING);
 
         printer.addJobs(Arrays.asList(printJob1, printJob2));
         printerRepository.save(printer);

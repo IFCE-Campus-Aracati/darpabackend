@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -20,7 +21,8 @@ public class PrintRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileUrl;
+    @Lob
+    private byte[] file;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -31,9 +33,8 @@ public class PrintRequest {
 
     public PrintRequest() {}
 
-    public PrintRequest(Long id, String fileUrl, User user, PrintJob printJob) {
+    public PrintRequest(Long id, User user, PrintJob printJob) {
         this.id = id;
-        this.fileUrl = fileUrl;
         this.user = user;
         this.printJob = printJob;
     }
@@ -46,12 +47,12 @@ public class PrintRequest {
         this.id = id;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
+    public byte[] getFile() {
+        return file;
     }
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
     public User getUser() {
