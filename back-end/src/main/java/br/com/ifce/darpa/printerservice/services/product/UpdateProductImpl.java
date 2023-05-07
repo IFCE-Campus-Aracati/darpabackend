@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import br.com.ifce.darpa.printerservice.services.UpdateProduct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class UpdateProductImpl implements UpdateProduct {
     @Override
     public void execute(UpdateProduct.Request request) {
         var target = productRepository.findById(request.id())
-                .orElseThrow(() -> new ProductNotFoundException(
+                .orElseThrow(() -> new NotFoundException(
                         "product with id %s not found".formatted(request.id())
                 ));
 

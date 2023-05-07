@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.models.Product;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import br.com.ifce.darpa.printerservice.services.UpdateProduct;
@@ -47,14 +47,14 @@ class UpdateProductTest {
     }
 
     @Test
-    void givenAnInvalidProductIdShouldThrowProductNotFoundException() {
+    void givenAnInvalidProductIdShouldThrowNotFoundException() {
         Long invalidId = 1L;
 
         Mockito.when(productRepository.findById(invalidId)).thenReturn(Optional.empty());
 
         UpdateProduct.Request request = new UpdateProduct.Request(invalidId, null, null, null);
 
-        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> updateProduct.execute(request));
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> updateProduct.execute(request));
 
         Assertions.assertEquals("product with id 1 not found", exception.getMessage());
     }

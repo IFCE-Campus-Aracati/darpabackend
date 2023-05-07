@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.models.Product;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import br.com.ifce.darpa.printerservice.services.SearchProduct;
@@ -42,14 +42,14 @@ class SearchProductTest {
     }
 
     @Test
-    void givenAnInvalidProductNameShouldThrowProductNotFoundException() {
+    void givenAnInvalidProductNameShouldThrowNotFoundException() {
         String productName = "Non-existent product";
 
         Mockito.when(productRepository.findByName(productName)).thenReturn(Optional.empty());
 
         SearchProduct.Request request = new SearchProduct.Request(productName);
 
-        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> searchProduct.execute(request));
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> searchProduct.execute(request));
 
         Assertions.assertEquals("product with name Non-existent product not found", exception.getMessage());
     }

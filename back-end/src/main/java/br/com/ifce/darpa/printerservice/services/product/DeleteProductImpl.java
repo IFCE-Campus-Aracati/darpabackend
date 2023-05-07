@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import br.com.ifce.darpa.printerservice.services.DeleteProduct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class DeleteProductImpl implements DeleteProduct {
         productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
                         () -> {
-                            throw new ProductNotFoundException(
+                            throw new NotFoundException(
                                     "product with id %d not found".formatted(id)
                             );
                         }

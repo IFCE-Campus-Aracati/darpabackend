@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.models.Product;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import org.junit.jupiter.api.Assertions;
@@ -33,16 +33,16 @@ class DeleteProductTest {
         deleteProduct.execute(validId);
 
         Mockito.verify(productRepository, Mockito.times(1)).findById(validId);
-        Mockito.verify(productRepository, Mockito.times(1)).delete(new Product());
+        Mockito.verify(productRepository, Mockito.times(1)).delete(Mockito.any());
     }
 
     @Test
-    void givenAnInvalidProductIdShouldThrowProductNotFoundException() {
+    void givenAnInvalidProductIdShouldThrowNotFoundException() {
         Long invalidId = 1L;
 
         Mockito.when(productRepository.findById(invalidId)).thenReturn(Optional.empty());
 
-        Exception exception = Assertions.assertThrows(ProductNotFoundException.class, () -> deleteProduct.execute(invalidId));
+        Exception exception = Assertions.assertThrows(NotFoundException.class, () -> deleteProduct.execute(invalidId));
 
         Assertions.assertEquals("product with id 1 not found", exception.getMessage());
 

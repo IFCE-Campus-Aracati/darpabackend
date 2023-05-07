@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.services.product;
 
-import br.com.ifce.darpa.printerservice.exceptions.ProductNotFoundException;
+import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.models.Product;
 import br.com.ifce.darpa.printerservice.repositories.ProductRepository;
 import br.com.ifce.darpa.printerservice.services.SearchProduct;
@@ -18,7 +18,7 @@ public class SearchProductImpl implements SearchProduct {
         return productRepository
                 .findByName(request.name())
                 .map(this::productToResponse)
-                .orElseThrow(() -> new ProductNotFoundException(
+                .orElseThrow(() -> new NotFoundException(
                         "product with name %s not found".formatted(request.name())
                 ));
     }
