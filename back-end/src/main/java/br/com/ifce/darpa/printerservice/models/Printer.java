@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,14 +24,13 @@ public class Printer {
     private String name;
 
     @OneToMany(mappedBy = "printer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PrintJob> printJobs;
+    private final List<PrintJob> printJobs = new ArrayList<>();
 
     public Printer() {}
 
-    public Printer(Long id, String name, List<PrintJob> printJobs) {
+    public Printer(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.printJobs = printJobs;
     }
 
     public Long getId() {
@@ -53,8 +53,12 @@ public class Printer {
         return printJobs;
     }
 
-    public void setPrintJobs(List<PrintJob> printJobs) {
-        this.printJobs = printJobs;
+    public void addJob(PrintJob job) {
+        this.printJobs.add(job);
+    }
+
+    public void addJobs(List<PrintJob> jobs) {
+        this.printJobs.addAll(jobs);
     }
 
     @Override

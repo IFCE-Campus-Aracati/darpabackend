@@ -2,16 +2,16 @@ package br.com.ifce.darpa.printerservice.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,22 +23,18 @@ public class PrintJob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "printer_id")
     private Printer printer;
 
     @OneToMany(mappedBy = "printJob", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<PrintRequest> printRequests;
-
-    @Enumerated(EnumType.STRING)
-    private PrintStatus status;
+    private final List<PrintRequest> printRequests = new ArrayList<>();
 
     public PrintJob() {}
 
-    public PrintJob(Long id, Printer printer, List<PrintRequest> printRequests, PrintStatus status) {
+    public PrintJob(Long id, Printer printer) {
         this.id = id;
         this.printer = printer;
-        this.printRequests = printRequests;
-        this.status = status;
     }
 
     public Long getId() {
@@ -61,16 +57,12 @@ public class PrintJob {
         return printRequests;
     }
 
-    public void setPrintRequests(List<PrintRequest> printRequests) {
-        this.printRequests = printRequests;
+    public void addRequest(PrintRequest request) {
+        this.printRequests.add(request);
     }
 
-    public PrintStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(PrintStatus status) {
-        this.status = status;
+    public void addRequests(List<PrintRequest> requests) {
+        this.printRequests.addAll(requests);
     }
 
     @Override
