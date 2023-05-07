@@ -2,8 +2,8 @@ package br.com.ifce.darpa.printerservice.repositories;
 
 import br.com.ifce.darpa.printerservice.models.PrintJob;
 import br.com.ifce.darpa.printerservice.models.PrintRequest;
-import br.com.ifce.darpa.printerservice.models.PrintStatus;
 import br.com.ifce.darpa.printerservice.models.Printer;
+import br.com.ifce.darpa.printerservice.models.Status;
 import br.com.ifce.darpa.printerservice.models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,23 +29,25 @@ class PrintJobRepositoryTest {
         var printer1 = new Printer(null, "HP");
         var printer2 = new Printer(null, "Epson");
 
-        var printJob1 = new PrintJob(null, printer1);
-        var printJob2 = new PrintJob(null, printer2);
+        var printJob1 = new PrintJob(null, printer1, Status.PENDING);
+        var printJob2 = new PrintJob(null, printer2, Status.PENDING);
+        var printJob3 = new PrintJob(null, printer2, Status.PENDING);
 
-        var printRequest1 = new PrintRequest(null, "file1.pdf", new User(), printJob1, PrintStatus.PENDING);
-        var printRequest2 = new PrintRequest(null, "file2.doc", new User(), printJob1, PrintStatus.PENDING);
-        var printRequest3 = new PrintRequest(null, "file3.png", new User(), printJob2, PrintStatus.PENDING);
+        var printRequest1 = new PrintRequest(null, "file1.pdf", new User(), printJob1);
+        var printRequest2 = new PrintRequest(null, "file2.doc", new User(), printJob2);
+        var printRequest3 = new PrintRequest(null, "file3.png", new User(), printJob3);
 
-        printJob1.addRequests(List.of(printRequest1, printRequest2));
-        printJob2.addRequest(printRequest3);
+        printJob1.setPrintRequest(printRequest1);
+        printJob2.setPrintRequest(printRequest2);
+        printJob3.setPrintRequest(printRequest3);
 
-        printJobRepository.saveAll(List.of(printJob1, printJob2));
+        printJobRepository.saveAll(List.of(printJob1, printJob2, printJob3));
     }
 
     @Test
     void givenPrintJobToAddShouldReturnAddedPrintJob() {
         var printer = new Printer(null, "Canon");
-        var printJob = new PrintJob(null, printer);
+        var printJob = new PrintJob(null, printer, Status.PENDING);
 
         printJobRepository.save(printJob);
 
@@ -59,8 +61,8 @@ class PrintJobRepositoryTest {
     @Test
     void givenAllPrintJobsShouldReturnListOfAllPrintJobs() {
         var listOfPrintJobsToSave = List.of(
-                new PrintJob(null, new Printer(null, "Samsung")),
-                new PrintJob(null, new Printer(null, "Brother"))
+                new PrintJob(null, new Printer(null, "Samsung"), Status.IN_PROGRESS),
+                new PrintJob(null, new Printer(null, "Brother"), Status.WAITING)
         );
 
         printJobRepository.saveAll(listOfPrintJobsToSave);
@@ -73,7 +75,7 @@ class PrintJobRepositoryTest {
     @Test
     void givenIdThenShouldReturnPrintJobOfThatId() {
         var printer = new Printer(null, "Xerox");
-        var printJob = new PrintJob(null, printer);
+        var printJob = new PrintJob(null, printer, Status.COMPLETED);
         var savedPrintJob = printJobRepository.save(printJob);
 
         var fetchedPrintJob = printJobRepository.findById(savedPrintJob.getId()).orElse(null);
@@ -88,7 +90,7 @@ class PrintJobRepositoryTest {
         var printer = new Printer(null, "HP LaserJet Pro M203dw");
         printerRepository.save(printer);
 
-        var printJob = new PrintJob(null, printer);
+        var printJob = new PrintJob(null, printer, Status.WAITING);
         printJobRepository.save(printJob);
 
         printJobRepository.deleteById(printJob.getId());

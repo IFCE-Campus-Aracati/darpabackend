@@ -1,7 +1,6 @@
 package br.com.ifce.darpa.printerservice.repositories;
 
 import br.com.ifce.darpa.printerservice.models.PrintRequest;
-import br.com.ifce.darpa.printerservice.models.PrintStatus;
 import br.com.ifce.darpa.printerservice.models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ class PrintRequestRepositoryTest {
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null, PrintStatus.PENDING);
+        var printRequest = new PrintRequest(null, "example.pdf", user, null);
 
         printRequestRepository.save(printRequest);
 
@@ -33,7 +32,6 @@ class PrintRequestRepositoryTest {
         Assertions.assertEquals(printRequest.getFileUrl(), fetchedPrintRequest.getFileUrl());
         Assertions.assertEquals(printRequest.getUser(), fetchedPrintRequest.getUser());
         Assertions.assertEquals(printRequest.getPrintJob(), fetchedPrintRequest.getPrintJob());
-        Assertions.assertEquals(printRequest.getStatus(), fetchedPrintRequest.getStatus());
     }
 
     @Test
@@ -41,8 +39,8 @@ class PrintRequestRepositoryTest {
         var user1 = new User(1L, "John Doe", "john@email.com", Set.of());
         var user2 = new User(1L, "Jane Doe", "jane@email.com", Set.of());
 
-        var printRequest1 = new PrintRequest(null, "example1.pdf", user1, null, PrintStatus.PENDING);
-        var printRequest2 = new PrintRequest(null, "example2.pdf", user2, null, PrintStatus.COMPLETED);
+        var printRequest1 = new PrintRequest(null, "example1.pdf", user1, null);
+        var printRequest2 = new PrintRequest(null, "example2.pdf", user2, null);
 
         printRequestRepository.saveAll(List.of(printRequest1, printRequest2));
 
@@ -54,7 +52,7 @@ class PrintRequestRepositoryTest {
     @Test
     void givenIdThenShouldReturnPrintRequestOfThatId() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null, PrintStatus.PENDING);
+        var printRequest = new PrintRequest(null, "example.pdf", user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
 
@@ -65,13 +63,12 @@ class PrintRequestRepositoryTest {
         Assertions.assertEquals(savedPrintRequest.getFileUrl(), fetchedPrintRequest.getFileUrl());
         Assertions.assertEquals(savedPrintRequest.getUser(), fetchedPrintRequest.getUser());
         Assertions.assertEquals(savedPrintRequest.getPrintJob(), fetchedPrintRequest.getPrintJob());
-        Assertions.assertEquals(savedPrintRequest.getStatus(), fetchedPrintRequest.getStatus());
     }
 
     @Test
     void givenIdToDeleteThenShouldDeleteThePrintRequest() {
         var user = new User(1L, "John Doe", "john@email.com", Set.of());
-        var printRequest = new PrintRequest(null, "example.pdf", user, null, PrintStatus.PENDING);
+        var printRequest = new PrintRequest(null, "example.pdf", user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
 

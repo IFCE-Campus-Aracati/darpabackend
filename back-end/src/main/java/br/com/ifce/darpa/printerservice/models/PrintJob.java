@@ -1,18 +1,17 @@
 package br.com.ifce.darpa.printerservice.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,14 +26,19 @@ public class PrintJob {
     @JoinColumn(name = "printer_id")
     private Printer printer;
 
-    @OneToMany(mappedBy = "printJob", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<PrintRequest> printRequests = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "print_request_id")
+    private PrintRequest printRequest;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public PrintJob() {}
 
-    public PrintJob(Long id, Printer printer) {
+    public PrintJob(Long id, Printer printer, Status status) {
         this.id = id;
         this.printer = printer;
+        this.status = status;
     }
 
     public Long getId() {
@@ -53,16 +57,20 @@ public class PrintJob {
         this.printer = printer;
     }
 
-    public List<PrintRequest> getPrintRequests() {
-        return printRequests;
+    public PrintRequest getPrintRequest() {
+        return printRequest;
     }
 
-    public void addRequest(PrintRequest request) {
-        this.printRequests.add(request);
+    public void setPrintRequest(PrintRequest printRequest) {
+        this.printRequest = printRequest;
     }
 
-    public void addRequests(List<PrintRequest> requests) {
-        this.printRequests.addAll(requests);
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override

@@ -2,6 +2,7 @@ package br.com.ifce.darpa.printerservice.repositories;
 
 import br.com.ifce.darpa.printerservice.models.PrintJob;
 import br.com.ifce.darpa.printerservice.models.Printer;
+import br.com.ifce.darpa.printerservice.models.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,8 +74,8 @@ class PrinterRepositoryTest {
 
     @Test
     void givenPrinterWithPrintJobsThenShouldReturnPrinterWithPrintJobs() {
-        var printJob1 = new PrintJob(null, printer);
-        var printJob2 = new PrintJob(null, printer);
+        var printJob1 = new PrintJob(null, printer, Status.PENDING);
+        var printJob2 = new PrintJob(null, printer, Status.PENDING);
 
         printer.addJobs(Arrays.asList(printJob1, printJob2));
         printerRepository.save(printer);

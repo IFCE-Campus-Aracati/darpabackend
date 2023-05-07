@@ -1,6 +1,6 @@
 package br.com.ifce.darpa.printerservice.models;
 
-public enum PrintStatus {
+public enum Status {
     PENDING,
     APPROVED,
     WAITING,
