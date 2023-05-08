@@ -15,24 +15,17 @@ public class SecurityConfig  {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll());
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()).csrf().disable().headers().frameOptions().sameOrigin();
+
         // @formatter:on
         return http.build();
     }
 
-    // @formatter:off
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService() {
-//        UserDetails user = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-    // @formatter:on
+
 
 }
+
+
 
 

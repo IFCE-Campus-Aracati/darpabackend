@@ -2,7 +2,6 @@ package br.com.ifce.darpa.printerservice.services;
 
 import br.com.ifce.darpa.printerservice.dtos.UserDTO;
 import br.com.ifce.darpa.printerservice.dtos.UserInsertDTO;
-import br.com.ifce.darpa.printerservice.dtos.UserUpdateDTO;
 import br.com.ifce.darpa.printerservice.models.User;
 import br.com.ifce.darpa.printerservice.repositories.RoleRepository;
 import br.com.ifce.darpa.printerservice.repositories.UserRepository;
@@ -34,16 +33,23 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public Page<UserDTO> findAllPaged(Pageable pageable) {
+    public Page<UserDTO> findAllPaged( Pageable pageable) {
         Page<User> list = repository.findAll(pageable);
-        return list.map(UserDTO::new);
+        return list.map(user -> new UserDTO(user, user.getRoles()));
     }
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
         Optional<User> obj = repository.findById(id);
         User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado!"));
-        return new UserDTO(entity);
+        return new UserDTO(entity, entity.getRoles());
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO findByEmail(String email) {
+        Optional<User> obj = repository.findByEmail(email);
+        User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado!"));
+        return new UserDTO(entity, entity.getRoles());
     }
 
     @Transactional
@@ -52,17 +58,18 @@ public class UserService {
         copyInsertDTOToEntity(dto, entity);
         entity.setPassword(bCryptPasswordEncoder.encode(dto.password()));
         entity = repository.save(entity);
-        return new UserDTO(entity);
+        return new UserDTO(entity, entity.getRoles());
+
     }
 
 
     @Transactional
-    public UserDTO update(Long id, UserUpdateDTO dto) {
+    public UserDTO update(Long id, UserInsertDTO dto) {
         try {
             User entity = repository.getReferenceById(id);
-            copyUpdateDTOToEntity(dto, entity);
+            copyInsertDTOToEntity(dto, entity);
             entity = repository.save(entity);
-            return new UserDTO(entity);
+            return new UserDTO(entity, entity.getRoles());
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id não encontrado!" + id);
         }
@@ -82,19 +89,14 @@ public class UserService {
     }
 
 
-    private void copyUpdateDTOToEntity(UserUpdateDTO dto, User entity) {
-        entity.setName(dto.name());
-        entity.setEmail(dto.email());
-        entity.getRoles().clear();
-        dto.roles().forEach(roleDTO -> entity.getRoles().add(roleRepository.getReferenceById(roleDTO.getId())));
-    }
-
     private void copyInsertDTOToEntity(UserInsertDTO dto, User entity) {
         entity.setName(dto.name());
         entity.setEmail(dto.email());
+
         entity.getRoles().clear();
-        dto.roles().forEach(roleDTO -> entity.getRoles().add(roleRepository.getReferenceById(roleDTO.getId())));
+        dto.roles().forEach(roleDto -> entity.getRoles().add(roleRepository.getReferenceById(roleDto.getId())));
     }
+
 
 
 }

@@ -2,7 +2,6 @@ package br.com.ifce.darpa.printerservice.resources;
 
 import br.com.ifce.darpa.printerservice.dtos.UserDTO;
 import br.com.ifce.darpa.printerservice.dtos.UserInsertDTO;
-import br.com.ifce.darpa.printerservice.dtos.UserUpdateDTO;
 import br.com.ifce.darpa.printerservice.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,14 @@ public class UserResource {
         return ResponseEntity.ok().body(dto);
     }
 
+    @GetMapping(value = "/search")
+    public ResponseEntity<UserDTO> findByEmail(@RequestParam String email) {
+        UserDTO dto = service.findByEmail(email);
+        return ResponseEntity.ok().body(dto);
+    }
+
+
+
     @PostMapping
     public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
         UserDTO newDTO = service.insert(dto);
@@ -43,7 +50,7 @@ public class UserResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserInsertDTO dto) {
         UserDTO newDto = service.update(id, dto);
         return ResponseEntity.ok().body(newDto);
     }
