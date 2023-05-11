@@ -11,7 +11,7 @@ spring:
     password:
 
   jpa:
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
