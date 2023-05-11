@@ -20,7 +20,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
-        var user = new User(1L, "John Doe", "john@email.com", Set.of());
+        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
         var printRequest = new PrintRequest(null, user, null);
 
         printRequestRepository.save(printRequest);
@@ -35,8 +35,8 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenAllPrintRequestsShouldReturnListOfAllPrintRequests() {
-        var user1 = new User(1L, "John Doe", "john@email.com", Set.of());
-        var user2 = new User(1L, "Jane Doe", "jane@email.com", Set.of());
+        var user1 = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
+        var user2 = new User(1L, "Jane Doe", "jane@email.com", "123456", Set.of());
 
         var printRequest1 = new PrintRequest(null, user1, null);
         var printRequest2 = new PrintRequest(null, user2, null);
@@ -50,7 +50,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenIdThenShouldReturnPrintRequestOfThatId() {
-        var user = new User(1L, "John Doe", "john@email.com", Set.of());
+        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
         var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
@@ -65,7 +65,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenIdToDeleteThenShouldDeleteThePrintRequest() {
-        var user = new User(1L, "John Doe", "john@email.com", Set.of());
+        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
         var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);

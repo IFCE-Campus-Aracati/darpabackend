@@ -38,7 +38,7 @@ class RegisterNewPrintRequestTest {
 
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
-        var owner = new User(1L, "John Doe", "john@email.com", Collections.emptySet());
+        var owner = new User(1L, "John Doe", "john@email.com", "123456", Collections.emptySet());
         var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
         var savedJobForThisPrintRequest = new RegisterNewPrintJob.Response(1L, Status.PENDING);
         var savedPrintRequest = new PrintRequest();
@@ -64,7 +64,7 @@ class RegisterNewPrintRequestTest {
     @Test
     void givenPrintRequestWithInvalidUserIdShouldThrowNotFoundException() {
         Long invalidId = 1L;
-        var owner = new User(invalidId, "Invalid User", "invalid-user@email.com", Collections.emptySet());
+        var owner = new User(invalidId, "Invalid User", "123456", "invalid-user@email.com", Collections.emptySet());
         var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
 
         Mockito.when(userRepository.findById(invalidId)).thenReturn(Optional.empty());
