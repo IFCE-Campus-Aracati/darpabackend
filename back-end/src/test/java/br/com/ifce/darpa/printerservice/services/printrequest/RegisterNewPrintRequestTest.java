@@ -2,6 +2,7 @@ package br.com.ifce.darpa.printerservice.services.printrequest;
 
 import br.com.ifce.darpa.printerservice.exceptions.NotFoundException;
 import br.com.ifce.darpa.printerservice.models.PrintRequest;
+import br.com.ifce.darpa.printerservice.models.Role;
 import br.com.ifce.darpa.printerservice.models.Status;
 import br.com.ifce.darpa.printerservice.models.User;
 import br.com.ifce.darpa.printerservice.repositories.PrintRequestRepository;
@@ -17,7 +18,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +38,7 @@ class RegisterNewPrintRequestTest {
 
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
-        var owner = new User(1L, "John Doe", "john@email.com", "123456", Collections.emptySet());
+        var owner = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
         var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
         var savedJobForThisPrintRequest = new RegisterNewPrintJob.Response(1L, Status.PENDING);
         var savedPrintRequest = new PrintRequest();
@@ -64,7 +64,7 @@ class RegisterNewPrintRequestTest {
     @Test
     void givenPrintRequestWithInvalidUserIdShouldThrowNotFoundException() {
         Long invalidId = 1L;
-        var owner = new User(invalidId, "Invalid User", "123456", "invalid-user@email.com", Collections.emptySet());
+        var owner = new User(invalidId, "Invalid", "User", "123456", "invalid-user@email.com", Role.ROLE_USER);
         var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
 
         Mockito.when(userRepository.findById(invalidId)).thenReturn(Optional.empty());

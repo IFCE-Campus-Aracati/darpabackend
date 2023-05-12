@@ -1,6 +1,7 @@
 package br.com.ifce.darpa.printerservice.repositories;
 
 import br.com.ifce.darpa.printerservice.models.PrintRequest;
+import br.com.ifce.darpa.printerservice.models.Role;
 import br.com.ifce.darpa.printerservice.models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Set;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -20,7 +20,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
-        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
+        var user = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
         var printRequest = new PrintRequest(null, user, null);
 
         printRequestRepository.save(printRequest);
@@ -35,8 +35,8 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenAllPrintRequestsShouldReturnListOfAllPrintRequests() {
-        var user1 = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
-        var user2 = new User(1L, "Jane Doe", "jane@email.com", "123456", Set.of());
+        var user1 = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
+        var user2 = new User(1L, "Jane", "Doe", "jane@email.com", "123456", Role.ROLE_USER);
 
         var printRequest1 = new PrintRequest(null, user1, null);
         var printRequest2 = new PrintRequest(null, user2, null);
@@ -50,7 +50,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenIdThenShouldReturnPrintRequestOfThatId() {
-        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
+        var user = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
         var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);
@@ -65,7 +65,7 @@ class PrintRequestRepositoryTest {
 
     @Test
     void givenIdToDeleteThenShouldDeleteThePrintRequest() {
-        var user = new User(1L, "John Doe", "john@email.com", "123456", Set.of());
+        var user = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
         var printRequest = new PrintRequest(null, user, null);
 
         var savedPrintRequest = printRequestRepository.save(printRequest);

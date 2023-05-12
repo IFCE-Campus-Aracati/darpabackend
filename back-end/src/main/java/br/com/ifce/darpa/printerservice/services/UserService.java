@@ -2,25 +2,33 @@ package br.com.ifce.darpa.printerservice.services;
 
 import br.com.ifce.darpa.printerservice.dtos.UserDTO;
 import br.com.ifce.darpa.printerservice.dtos.UserInsertDTO;
+import br.com.ifce.darpa.printerservice.models.Role;
 import br.com.ifce.darpa.printerservice.models.User;
-import br.com.ifce.darpa.printerservice.repositories.RoleRepository;
 import br.com.ifce.darpa.printerservice.repositories.UserRepository;
 import br.com.ifce.darpa.printerservice.services.exceptions.DatabaseException;
 import br.com.ifce.darpa.printerservice.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -28,28 +36,26 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
 
     @Transactional(readOnly = true)
     public Page<UserDTO> findAllPaged( Pageable pageable) {
         Page<User> list = repository.findAll(pageable);
-        return list.map(user -> new UserDTO(user, user.getRoles()));
+        return list.map(UserDTO::new);
     }
 
     @Transactional(readOnly = true)
     public UserDTO findById(Long id) {
         Optional<User> obj = repository.findById(id);
         User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado!"));
-        return new UserDTO(entity, entity.getRoles());
+        return new UserDTO(entity);
     }
 
     @Transactional(readOnly = true)
     public UserDTO findByEmail(String email) {
         Optional<User> obj = repository.findByEmail(email);
         User entity = obj.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado!"));
-        return new UserDTO(entity, entity.getRoles());
+        return new UserDTO(entity);
     }
 
     @Transactional
@@ -58,7 +64,7 @@ public class UserService {
         copyInsertDTOToEntity(dto, entity);
         entity.setPassword(bCryptPasswordEncoder.encode(dto.password()));
         entity = repository.save(entity);
-        return new UserDTO(entity, entity.getRoles());
+        return new UserDTO(entity);
 
     }
 
@@ -69,7 +75,7 @@ public class UserService {
             User entity = repository.getReferenceById(id);
             copyInsertDTOToEntity(dto, entity);
             entity = repository.save(entity);
-            return new UserDTO(entity, entity.getRoles());
+            return new UserDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id não encontrado!" + id);
         }
@@ -90,13 +96,23 @@ public class UserService {
 
 
     private void copyInsertDTOToEntity(UserInsertDTO dto, User entity) {
-        entity.setName(dto.name());
+        entity.setFirstName(dto.firstName());
+        entity.setLastName(dto.lastName());
         entity.setEmail(dto.email());
+        entity.setRole(Role.valueOf(dto.role()));
 
-        entity.getRoles().clear();
-        dto.roles().forEach(roleDto -> entity.getRoles().add(roleRepository.getReferenceById(roleDto.getId())));
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> obj = repository.findByEmail(username);
+        if (obj.isPresent()) {
+            logger.info("User: " + username + " found!");
+            return obj.get();
+        }
+        logger.error("User: " + username + " not found!");
+        throw new UsernameNotFoundException("Email não encontrado!");
 
+    }
 }
