@@ -4,3 +4,5 @@ spring:
 
   jpa:
     open-in-view: false
+jwt:
+  secret: 67556B58703273357638792F413F4428472B4B6250655368566D597133743677
