@@ -14,6 +14,26 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Data
 @Builder
@@ -24,6 +44,7 @@ import java.util.List;
 public class User implements  Serializable, UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,9 +53,18 @@ public class User implements  Serializable, UserDetails {
     private String lastName;
     @Column(unique = true)
     private String email;
+
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<PrintRequest> printRequests = new ArrayList<>();
+
+    public User() {
+    }
 
 
     @Override
@@ -57,6 +87,14 @@ public class User implements  Serializable, UserDetails {
         return true;
     }
 
+    private void addPrintRequest(PrintRequest printRequest) {
+        this.printRequests.add(printRequest);
+    }
+
+    private List<PrintRequest> getPrintRequests() {
+        return this.printRequests;
+    }
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
@@ -74,4 +112,3 @@ public class User implements  Serializable, UserDetails {
 
 
 }
-
