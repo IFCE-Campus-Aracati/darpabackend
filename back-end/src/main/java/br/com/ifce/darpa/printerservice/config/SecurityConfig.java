@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,12 +27,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
                 http
-                    .csrf()
-                    .disable()
+                    .csrf().disable()
                     .authorizeHttpRequests()
                     .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                     .requestMatchers("/api/v1/auth/**").permitAll()
-                    .requestMatchers("/h2-console/**").permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
+                    .permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()
@@ -40,8 +41,11 @@ public class SecurityConfig {
                     .and()
                     .authenticationProvider(authenticationProvider)
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http
+                .headers().frameOptions().disable();
             return http.build();
+
+
         }
     }
 
