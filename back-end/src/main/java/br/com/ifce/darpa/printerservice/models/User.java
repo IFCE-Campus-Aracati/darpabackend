@@ -41,8 +41,10 @@ public class User implements  Serializable, UserDetails {
     private Role role;
 
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<PrintRequest> printRequests = new ArrayList<>();
+
 
 
 

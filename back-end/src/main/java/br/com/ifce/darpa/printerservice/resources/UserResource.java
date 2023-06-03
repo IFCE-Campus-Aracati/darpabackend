@@ -1,17 +1,11 @@
 package br.com.ifce.darpa.printerservice.resources;
 
-import br.com.ifce.darpa.printerservice.dtos.UserDTO;
-import br.com.ifce.darpa.printerservice.dtos.UserInsertDTO;
-import br.com.ifce.darpa.printerservice.services.UserService;
-import jakarta.validation.Valid;
+import br.com.ifce.darpa.printerservice.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -20,45 +14,47 @@ public class UserResource {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private ListRegisteredUsers listRegisteredUsers;
+
+    @Autowired
+    private UpdateUser updateUser;
+
+    @Autowired
+    private SearchUser searchUser;
+
+    @Autowired
+    private DeleteUser deleteUser;
+
+
+
     @GetMapping
-    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
-        Page<UserDTO> list = service.findAllPaged(pageable);
+    public ResponseEntity<Page<ListRegisteredUsers.Response>> findAll(Pageable pageable) {
+        Page<ListRegisteredUsers.Response> list = listRegisteredUsers.execute(new ListRegisteredUsers.Request(pageable.getPageNumber(), pageable.getPageSize()));
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        UserDTO dto = service.findById(id);
-        return ResponseEntity.ok().body(dto);
-    }
+
+
 
     @GetMapping(value = "/search")
-    public ResponseEntity<UserDTO> findByEmail(@RequestParam String email) {
-        UserDTO dto = service.findByEmail(email);
-        return ResponseEntity.ok().body(dto);
+    public ResponseEntity<SearchUser.Response> search(@RequestBody SearchUser.Request email) {
+        SearchUser.Response response = searchUser.execute(email);
+        return ResponseEntity.ok().body(response);
     }
 
-
-
-    @PostMapping
-    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
-        UserDTO newDTO = service.insert(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newDTO.id()).toUri();
-
-        return ResponseEntity.created(uri).body(newDTO);
-    }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserInsertDTO dto) {
-        UserDTO newDto = service.update(id, dto);
-        return ResponseEntity.ok().body(newDto);
+    public ResponseEntity<UpdateUser.Response> update(@PathVariable Long id, @RequestBody UpdateUser.Request request) {
+        UpdateUser.Response response = updateUser.execute(id, request);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
+        deleteUser.execute(id);
         return ResponseEntity.noContent().build();
+
     }
 
 }
