@@ -1,5 +1,7 @@
 package br.com.ifce.darpa.printerservice.services;
 
+import br.com.ifce.darpa.printerservice.models.Role;
+
 public interface AuthenticateUser {
 
         Response execute(Request request);
@@ -8,7 +10,11 @@ public interface AuthenticateUser {
 
         }
 
-        record Response(String token) {
+        record UserDetails(String firstName, String lastName, String email) {
+
+        }
+
+        record Response(Role role, String token, UserDetails user) {
 
         }
 }
