@@ -32,11 +32,11 @@ public class ListPrintRequestsImpl implements ListPrintRequests {
                 .map(printRequest -> {
                     Long printRequestId = printRequest.getId();
                     String name = printRequest.getName();
-                    LocalDate printRequestCreationDate = printRequest.getCreatedAt();
+                    LocalDate printRequestScheduledDate = printRequest.getScheduledDate();
                     String printRequestDescription = printRequest.getDescription();
                     Status printRequestStatus = printRequest.getPrintJob().getStatus();
 
-                    return new RequestDetails(printRequestId, name, printRequestCreationDate, printRequestDescription, printRequestStatus);
+                    return new RequestDetails(printRequestId, name, printRequestScheduledDate, printRequestDescription, printRequestStatus);
                 });
 
         return new Response(

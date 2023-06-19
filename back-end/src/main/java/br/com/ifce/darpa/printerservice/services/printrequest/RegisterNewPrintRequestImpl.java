@@ -41,6 +41,7 @@ public class RegisterNewPrintRequestImpl implements RegisterNewPrintRequest {
         newPrintRequest.setFile(request.file());
         newPrintRequest.setUser(owner);
         newPrintRequest.setDescription(request.description());
+        newPrintRequest.setScheduledDate(request.date());
 
         newPrintRequest = printRequestRepository.save(newPrintRequest);
 

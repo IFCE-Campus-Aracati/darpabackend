@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping(value = "api/v1/requests")
@@ -28,13 +30,15 @@ public class PrintRequestResource {
     public ResponseEntity<RegisterNewPrintRequest.Response> newPrintRequest(
             @RequestParam("name") String name,
             @RequestParam("file") MultipartFile file,
-            @RequestParam("description") String description
+            @RequestParam("description") String description,
+            @RequestParam("date") String date
     ) {
         var response = registerNewPrintRequest.execute(
                 new RegisterNewPrintRequest.Request(
                         name,
                         extractBytesFromMultipartFile(file),
-                        description
+                        description,
+                        LocalDate.parse(date, DateTimeFormatter.ISO_DATE)
                 )
         );
 

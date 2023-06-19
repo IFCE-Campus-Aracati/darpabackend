@@ -41,6 +41,8 @@ public class PrintRequest {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     Instant createdAt;
 
+    LocalDate scheduledDate;
+
     String description;
 
     public PrintRequest() {}
@@ -113,6 +115,14 @@ public class PrintRequest {
     @PrePersist
     public void setRequestCreation() {
         this.createdAt = Instant.now();
+    }
+
+    public LocalDate getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDate scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 
     @Override
