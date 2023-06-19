@@ -8,15 +8,15 @@ import java.util.List;
 public interface ListPrintRequests {
     Response execute(Request request);
 
-    record Request(Long userId) {
+    record Request(int page, int size) {
 
     }
 
-    record RequestDetails(Long id, LocalDate date, String description,
+    record RequestDetails(Long id, String name, LocalDate date, String description,
                           Status status) {
     }
 
-    record Response(List<RequestDetails> requests) {
+    record Response(Long totalItems, List<RequestDetails> requests, Integer totalPages, Integer currentPage) {
 
     }
 }

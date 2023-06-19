@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationResource {
 
     private final AuthenticateUser authenticateUser;
-    private  final RegisterNewUser registerNewUser;
+    private final RegisterNewUser registerNewUser;
 
     public AuthenticationResource(AuthenticateUser authenticateUser, RegisterNewUser registerNewUser) {
         this.authenticateUser = authenticateUser;
@@ -22,7 +22,7 @@ public class AuthenticationResource {
 
     @PostMapping(value = "/register")
     public ResponseEntity<RegisterNewUser.Response> register(
-            @RequestBody  RegisterNewUser.Request request
+            @RequestBody RegisterNewUser.Request request
     ) {
         return ResponseEntity.ok(registerNewUser.execute(request));
     }
