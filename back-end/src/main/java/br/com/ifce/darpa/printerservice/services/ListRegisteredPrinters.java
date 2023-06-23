@@ -1,15 +1,20 @@
 package br.com.ifce.darpa.printerservice.services;
 
-import org.springframework.data.domain.Page;
+import java.util.List;
 
 public interface ListRegisteredPrinters {
-    Page<Response> execute(Request request);
+    Response execute(Request request);
 
     record Request(int pageNumber, int pageSize) {
 
     }
 
-    record Response(Long id, String name) {
+    record PrinterDetails(Long id, String name) {
+
+    }
+
+    record Response(Long totalItems, List<PrinterDetails> printers,
+                    Integer totalPages, Integer currentPage) {
 
     }
 }

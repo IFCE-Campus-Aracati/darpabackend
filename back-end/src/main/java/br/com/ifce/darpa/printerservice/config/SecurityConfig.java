@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-                .requestMatchers("/api/v1/auth/**", "/requests/**").permitAll() // TODO: apenas para testes
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .permitAll()
                 .anyRequest()
