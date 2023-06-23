@@ -34,6 +34,6 @@ INSERT INTO tb_print_job (printer_id, print_request_id, status) VALUES (3, 11, '
 INSERT INTO tb_print_job (printer_id, print_request_id, status) VALUES (NULL, 12, 'PENDING');
 INSERT INTO tb_print_job (printer_id, print_request_id, status) VALUES (NULL, 13, 'PENDING');
 
-INSERT INTO tb_product (id, name, description, quantity) VALUES (1, 'Filamento ABS', 'Filamento ABS Premium para impressora 3D 500g 1,7mm (Branco Gesso)', 10);
-INSERT INTO tb_product (id, name, description, quantity) VALUES (2, 'Filamento PLA', 'Filamento PLA Premium para Impressora 3D 1,75mm 1kg(Preto)', 10);
-INSERT INTO tb_product (id, name, description, quantity) VALUES (3, 'Placa MDF', 'MDF cru 3mm (verde)', 10);
+INSERT INTO tb_product (name, description, quantity) VALUES ('Filamento ABS', 'Filamento ABS Premium para impressora 3D 500g 1,7mm (Branco Gesso)', 1);
+INSERT INTO tb_product (name, description, quantity) VALUES ('Filamento PLA', 'Filamento PLA Premium para Impressora 3D 1,75mm 1kg(Preto)', 10);
+INSERT INTO tb_product (name, description, quantity) VALUES ('Placa MDF', 'MDF cru 3mm (verde)', 5);

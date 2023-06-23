@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .permitAll()
