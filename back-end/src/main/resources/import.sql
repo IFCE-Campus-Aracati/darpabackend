@@ -2,9 +2,9 @@ INSERT INTO tb_user (first_name, last_name, email, password, role) VALUES ('Alex
 INSERT INTO tb_user (first_name, last_name, email, password, role) VALUES ('Bob', 'Grey', 'bob@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'ROLE_MANAGER');
 INSERT INTO tb_user (first_name, last_name, email, password, role) VALUES ('Maria', 'Green', 'maria@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG', 'ROLE_ADMIN');
 
-INSERT INTO tb_printer (id, name) VALUES (1, 'Impressora 1');
-INSERT INTO tb_printer (id, name) VALUES (2, 'Impressora 2');
-INSERT INTO tb_printer (id, name) VALUES (3, 'Impressora 3');
+INSERT INTO tb_printer (name) VALUES ('Impressora 1');
+INSERT INTO tb_printer (name) VALUES ('Impressora 2');
+INSERT INTO tb_printer (name) VALUES ('Impressora 3');
 
 INSERT INTO tb_print_request (name, file, user_id, created_at, scheduled_date, description) VALUES ('Print Request 1', NULL, 1, CURRENT_TIMESTAMP, CURRENT_DATE, 'Description 1');
 INSERT INTO tb_print_request (name, file, user_id, created_at, scheduled_date, description) VALUES ('Print Request 2', NULL, 1, CURRENT_TIMESTAMP, CURRENT_DATE, 'Description 2');

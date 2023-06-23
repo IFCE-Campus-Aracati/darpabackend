@@ -2,6 +2,7 @@ package br.com.ifce.darpa.printerservice.repositories;
 
 import br.com.ifce.darpa.printerservice.models.PrintJob;
 import br.com.ifce.darpa.printerservice.models.Printer;
+import br.com.ifce.darpa.printerservice.models.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,4 +14,7 @@ public interface PrintJobRepository extends JpaRepository<PrintJob, Long> {
 
     @EntityGraph(attributePaths = {"printRequest", "printRequest.user"})
     Page<PrintJob> findByPrinter(Printer printer, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"printRequest", "printRequest.user"})
+    Page<PrintJob> findByStatus(Status status, Pageable pageable);
 }

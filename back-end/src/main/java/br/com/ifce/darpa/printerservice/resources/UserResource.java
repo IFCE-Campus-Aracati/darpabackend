@@ -60,6 +60,5 @@ public class UserResource {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteUser.execute(id);
         return ResponseEntity.noContent().build();
-
     }
 }
