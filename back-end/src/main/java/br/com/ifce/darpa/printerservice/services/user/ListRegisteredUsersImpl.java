@@ -1,10 +1,8 @@
 package br.com.ifce.darpa.printerservice.services.user;
 
-import br.com.ifce.darpa.printerservice.models.User;
 import br.com.ifce.darpa.printerservice.repositories.UserRepository;
 import br.com.ifce.darpa.printerservice.services.ListRegisteredUsers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +13,21 @@ public class ListRegisteredUsersImpl implements ListRegisteredUsers {
     private UserRepository userRepository;
 
     @Override
-    public Page<ListRegisteredUsers.Response> execute(ListRegisteredUsers.Request request) {
-        return userRepository
+    public ListRegisteredUsers.Response execute(ListRegisteredUsers.Request request) {
+        var pageOfUsers = userRepository
                 .findAll(PageRequest.of(request.pageNumber(), request.pageSize()))
-                .map(this::userToResponse);
-    }
+                .map(user -> new UserDetails(
+                        user.getId(),
+                        user.getFirstName() + " " + user.getLastName(),
+                        user.getEmail(),
+                        user.getRole()
+                ));
 
-    private ListRegisteredUsers.Response userToResponse(User user) {
-        return new ListRegisteredUsers.Response(
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getRole()
+        return new Response(
+                pageOfUsers.getTotalElements(),
+                pageOfUsers.getContent(),
+                pageOfUsers.getTotalPages(),
+                pageOfUsers.getNumber()
         );
     }
 }

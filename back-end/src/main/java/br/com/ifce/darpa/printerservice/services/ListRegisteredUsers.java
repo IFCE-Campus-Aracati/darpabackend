@@ -1,17 +1,23 @@
 package br.com.ifce.darpa.printerservice.services;
 
 import br.com.ifce.darpa.printerservice.models.Role;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface ListRegisteredUsers {
 
-    Page<Response> execute(Request request);
+    Response execute(Request request);
 
     record Request(int pageNumber, int pageSize) {
 
     }
 
-    record Response(Long id, String firstName, String lastName, String email, Role role) {
+    record UserDetails(Long id, String name, String email, Role role) {
+
+    }
+
+    record Response(Long totalItems, List<UserDetails> users,
+                    Integer totalPages, Integer currentPage) {
 
     }
 }
