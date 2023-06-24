@@ -1,18 +1,21 @@
 package br.com.ifce.darpa.printerservice.services;
 
-import org.springframework.data.domain.Page;
-
 import java.math.BigInteger;
+import java.util.List;
 
 public interface ListRegisteredProducts {
-    Page<Response> execute(Request request);
+    Response execute(Request request);
 
     record Request(int pageNumber, int pageSize) {
 
     }
 
-    record Response(Long id, String name, String description,
-                    BigInteger quantity) {
+    record ProductDetails(Long id, String name, String description,
+                          BigInteger quantity) {
+    }
+
+    record Response(Long totalItems, List<ProductDetails> products,
+                    Integer totalPages, Integer currentPage) {
 
     }
 }

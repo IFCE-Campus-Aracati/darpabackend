@@ -1,10 +1,8 @@
 package br.com.ifce.darpa.printerservice.services.printer;
 
-import br.com.ifce.darpa.printerservice.models.Printer;
 import br.com.ifce.darpa.printerservice.repositories.PrinterRepository;
 import br.com.ifce.darpa.printerservice.services.ListRegisteredPrinters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +13,19 @@ public class ListRegisteredPrintersImpl implements ListRegisteredPrinters {
     private PrinterRepository printerRepository;
 
     @Override
-    public Page<ListRegisteredPrinters.Response> execute(ListRegisteredPrinters.Request request) {
-        return printerRepository
+    public ListRegisteredPrinters.Response execute(ListRegisteredPrinters.Request request) {
+        var pageOfPrinters = printerRepository
                 .findAll(PageRequest.of(request.pageNumber(), request.pageSize()))
-                .map(this::printerToResponse);
-    }
+                .map(printer -> new PrinterDetails(
+                        printer.getId(),
+                        printer.getName()
+                ));
 
-    private ListRegisteredPrinters.Response printerToResponse(Printer printer) {
-        return new ListRegisteredPrinters.Response(
-                printer.getId(),
-                printer.getName()
+        return new Response(
+                pageOfPrinters.getTotalElements(),
+                pageOfPrinters.getContent(),
+                pageOfPrinters.getTotalPages(),
+                pageOfPrinters.getNumber()
         );
     }
 }

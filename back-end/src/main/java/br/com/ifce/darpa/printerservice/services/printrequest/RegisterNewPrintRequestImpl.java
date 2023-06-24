@@ -8,6 +8,7 @@ import br.com.ifce.darpa.printerservice.repositories.UserRepository;
 import br.com.ifce.darpa.printerservice.services.RegisterNewPrintJob;
 import br.com.ifce.darpa.printerservice.services.RegisterNewPrintRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,14 +31,17 @@ public class RegisterNewPrintRequestImpl implements RegisterNewPrintRequest {
 
     @Override
     public RegisterNewPrintRequest.Response execute(RegisterNewPrintRequest.Request request) {
-        var owner = userRepository.findById(request.userId())
-                .orElseThrow(() -> new NotFoundException(
-                        "user with id %d not found".formatted(request.userId())
-                ));
+        var email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        var owner = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("user not found"));
 
         PrintRequest newPrintRequest = new PrintRequest();
+        newPrintRequest.setName(request.name());
         newPrintRequest.setFile(request.file());
         newPrintRequest.setUser(owner);
+        newPrintRequest.setDescription(request.description());
+        newPrintRequest.setScheduledDate(request.date());
 
         newPrintRequest = printRequestRepository.save(newPrintRequest);
 

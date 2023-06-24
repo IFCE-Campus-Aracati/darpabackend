@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +40,7 @@ class RegisterNewPrintRequestTest {
     @Test
     void givenPrintRequestToAddShouldReturnAddedPrintRequest() {
         var owner = new User(1L, "John", "Doe", "john@email.com", "123456", Role.ROLE_USER);
-        var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
+        var printRequest = new RegisterNewPrintRequest.Request("file name", new byte[]{}, "request description", LocalDate.now());
         var savedJobForThisPrintRequest = new RegisterNewPrintJob.Response(1L, Status.PENDING);
         var savedPrintRequest = new PrintRequest();
         savedPrintRequest.setId(1L);
@@ -65,7 +66,7 @@ class RegisterNewPrintRequestTest {
     void givenPrintRequestWithInvalidUserIdShouldThrowNotFoundException() {
         Long invalidId = 1L;
         var owner = new User(invalidId, "Invalid", "User", "123456", "invalid-user@email.com", Role.ROLE_USER);
-        var printRequest = new RegisterNewPrintRequest.Request(owner.getId(), new byte[]{});
+        var printRequest = new RegisterNewPrintRequest.Request("file name", new byte[]{}, "request description", LocalDate.now());
 
         Mockito.when(userRepository.findById(invalidId)).thenReturn(Optional.empty());
 

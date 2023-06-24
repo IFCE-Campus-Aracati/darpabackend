@@ -1,7 +1,17 @@
 package br.com.ifce.darpa.printerservice.models;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +32,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_user")
-public class User implements  Serializable, UserDetails {
+public class User implements Serializable, UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +55,6 @@ public class User implements  Serializable, UserDetails {
     private final List<PrintRequest> printRequests = new ArrayList<>();
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -66,11 +75,11 @@ public class User implements  Serializable, UserDetails {
         return true;
     }
 
-    private void addPrintRequest(PrintRequest printRequest) {
+    public void addPrintRequest(PrintRequest printRequest) {
         this.printRequests.add(printRequest);
     }
 
-    private List<PrintRequest> getPrintRequests() {
+    public List<PrintRequest> getPrintRequests() {
         return this.printRequests;
     }
 
